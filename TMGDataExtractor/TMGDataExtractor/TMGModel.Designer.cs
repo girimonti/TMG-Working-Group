@@ -24,32 +24,32 @@ namespace TMG.DataExtractor
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    public partial class TMGModelContainer : ObjectContext
+    public partial class TMGEntities : ObjectContext
     {
         #region Constructors
     
         /// <summary>
-        /// Initializes a new TMGModelContainer object using the connection string found in the 'TMGModelContainer' section of the application configuration file.
+        /// Initializes a new TMGEntities object using the connection string found in the 'TMGEntities' section of the application configuration file.
         /// </summary>
-        public TMGModelContainer() : base("name=TMGModelContainer", "TMGModelContainer")
+        public TMGEntities() : base("name=TMGEntities", "TMGEntities")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new TMGModelContainer object.
+        /// Initialize a new TMGEntities object.
         /// </summary>
-        public TMGModelContainer(string connectionString) : base(connectionString, "TMGModelContainer")
+        public TMGEntities(string connectionString) : base(connectionString, "TMGEntities")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new TMGModelContainer object.
+        /// Initialize a new TMGEntities object.
         /// </summary>
-        public TMGModelContainer(EntityConnection connection) : base(connection, "TMGModelContainer")
+        public TMGEntities(EntityConnection connection) : base(connection, "TMGEntities")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
@@ -68,28 +68,28 @@ namespace TMG.DataExtractor
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Person> Persons
+        public ObjectSet<Person> People
         {
             get
             {
-                if ((_Persons == null))
+                if ((_People == null))
                 {
-                    _Persons = base.CreateObjectSet<Person>("Persons");
+                    _People = base.CreateObjectSet<Person>("People");
                 }
-                return _Persons;
+                return _People;
             }
         }
-        private ObjectSet<Person> _Persons;
+        private ObjectSet<Person> _People;
 
         #endregion
         #region AddTo Methods
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Persons EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the People EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToPersons(Person person)
+        public void AddToPeople(Person person)
         {
-            base.AddObject("Persons", person);
+            base.AddObject("People", person);
         }
 
         #endregion
@@ -114,52 +114,28 @@ namespace TMG.DataExtractor
         /// Create a new Person object.
         /// </summary>
         /// <param name="pER_NO">Initial value of the PER_NO property.</param>
-        /// <param name="fATHER">Initial value of the FATHER property.</param>
-        /// <param name="mOTHER">Initial value of the MOTHER property.</param>
         /// <param name="lAST_EDIT">Initial value of the LAST_EDIT property.</param>
         /// <param name="dSID">Initial value of the DSID property.</param>
-        /// <param name="rEF_ID">Initial value of the REF_ID property.</param>
-        /// <param name="rEFERENCE">Initial value of the REFERENCE property.</param>
-        /// <param name="sPOULAST">Initial value of the SPOULAST property.</param>
-        /// <param name="sCBUFF">Initial value of the SCBUFF property.</param>
-        /// <param name="pBIRTH">Initial value of the PBIRTH property.</param>
-        /// <param name="pDEATH">Initial value of the PDEATH property.</param>
         /// <param name="sEX">Initial value of the SEX property.</param>
+        /// <param name="lIVING">Initial value of the LIVING property.</param>
         /// <param name="bIRTHORDER">Initial value of the BIRTHORDER property.</param>
         /// <param name="mULTIBIRTH">Initial value of the MULTIBIRTH property.</param>
         /// <param name="aDOPTED">Initial value of the ADOPTED property.</param>
         /// <param name="aNCE_INT">Initial value of the ANCE_INT property.</param>
         /// <param name="dESC_INT">Initial value of the DESC_INT property.</param>
-        /// <param name="rELATE">Initial value of the RELATE property.</param>
-        /// <param name="rELATEFO">Initial value of the RELATEFO property.</param>
-        /// <param name="tT">Initial value of the TT property.</param>
-        /// <param name="fLAG1">Initial value of the FLAG1 property.</param>
-        /// <param name="lIVING">Initial value of the LIVING property.</param>
-        public static Person CreatePerson(global::System.Int32 pER_NO, global::System.Int32 fATHER, global::System.Int32 mOTHER, global::System.DateTime lAST_EDIT, global::System.Int32 dSID, global::System.Int32 rEF_ID, global::System.String rEFERENCE, global::System.Int32 sPOULAST, global::System.String sCBUFF, global::System.String pBIRTH, global::System.String pDEATH, global::System.String sEX, global::System.String bIRTHORDER, global::System.String mULTIBIRTH, global::System.String aDOPTED, global::System.String aNCE_INT, global::System.String dESC_INT, global::System.Int32 rELATE, global::System.Int32 rELATEFO, global::System.String tT, global::System.String fLAG1, global::System.String lIVING)
+        public static Person CreatePerson(global::System.Int64 pER_NO, global::System.DateTime lAST_EDIT, global::System.Int64 dSID, global::System.String sEX, global::System.String lIVING, global::System.String bIRTHORDER, global::System.String mULTIBIRTH, global::System.String aDOPTED, global::System.String aNCE_INT, global::System.String dESC_INT)
         {
             Person person = new Person();
             person.PER_NO = pER_NO;
-            person.FATHER = fATHER;
-            person.MOTHER = mOTHER;
             person.LAST_EDIT = lAST_EDIT;
             person.DSID = dSID;
-            person.REF_ID = rEF_ID;
-            person.REFERENCE = rEFERENCE;
-            person.SPOULAST = sPOULAST;
-            person.SCBUFF = sCBUFF;
-            person.PBIRTH = pBIRTH;
-            person.PDEATH = pDEATH;
             person.SEX = sEX;
+            person.LIVING = lIVING;
             person.BIRTHORDER = bIRTHORDER;
             person.MULTIBIRTH = mULTIBIRTH;
             person.ADOPTED = aDOPTED;
             person.ANCE_INT = aNCE_INT;
             person.DESC_INT = dESC_INT;
-            person.RELATE = rELATE;
-            person.RELATEFO = rELATEFO;
-            person.TT = tT;
-            person.FLAG1 = fLAG1;
-            person.LIVING = lIVING;
             return person;
         }
 
@@ -171,7 +147,7 @@ namespace TMG.DataExtractor
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 PER_NO
+        public global::System.Int64 PER_NO
         {
             get
             {
@@ -189,16 +165,16 @@ namespace TMG.DataExtractor
                 }
             }
         }
-        private global::System.Int32 _PER_NO;
-        partial void OnPER_NOChanging(global::System.Int32 value);
+        private global::System.Int64 _PER_NO;
+        partial void OnPER_NOChanging(global::System.Int64 value);
         partial void OnPER_NOChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 FATHER
+        public Nullable<global::System.Int64> FATHER
         {
             get
             {
@@ -213,16 +189,16 @@ namespace TMG.DataExtractor
                 OnFATHERChanged();
             }
         }
-        private global::System.Int32 _FATHER;
-        partial void OnFATHERChanging(global::System.Int32 value);
+        private Nullable<global::System.Int64> _FATHER;
+        partial void OnFATHERChanging(Nullable<global::System.Int64> value);
         partial void OnFATHERChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 MOTHER
+        public Nullable<global::System.Int64> MOTHER
         {
             get
             {
@@ -237,8 +213,8 @@ namespace TMG.DataExtractor
                 OnMOTHERChanged();
             }
         }
-        private global::System.Int32 _MOTHER;
-        partial void OnMOTHERChanging(global::System.Int32 value);
+        private Nullable<global::System.Int64> _MOTHER;
+        partial void OnMOTHERChanging(Nullable<global::System.Int64> value);
         partial void OnMOTHERChanged();
     
         /// <summary>
@@ -270,7 +246,7 @@ namespace TMG.DataExtractor
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 DSID
+        public global::System.Int64 DSID
         {
             get
             {
@@ -285,16 +261,16 @@ namespace TMG.DataExtractor
                 OnDSIDChanged();
             }
         }
-        private global::System.Int32 _DSID;
-        partial void OnDSIDChanging(global::System.Int32 value);
+        private global::System.Int64 _DSID;
+        partial void OnDSIDChanging(global::System.Int64 value);
         partial void OnDSIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 REF_ID
+        public Nullable<global::System.Int64> REF_ID
         {
             get
             {
@@ -309,14 +285,14 @@ namespace TMG.DataExtractor
                 OnREF_IDChanged();
             }
         }
-        private global::System.Int32 _REF_ID;
-        partial void OnREF_IDChanging(global::System.Int32 value);
+        private Nullable<global::System.Int64> _REF_ID;
+        partial void OnREF_IDChanging(Nullable<global::System.Int64> value);
         partial void OnREF_IDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String REFERENCE
         {
@@ -328,7 +304,7 @@ namespace TMG.DataExtractor
             {
                 OnREFERENCEChanging(value);
                 ReportPropertyChanging("REFERENCE");
-                _REFERENCE = StructuralObject.SetValidValue(value, false);
+                _REFERENCE = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("REFERENCE");
                 OnREFERENCEChanged();
             }
@@ -340,9 +316,9 @@ namespace TMG.DataExtractor
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 SPOULAST
+        public Nullable<global::System.Int64> SPOULAST
         {
             get
             {
@@ -357,14 +333,14 @@ namespace TMG.DataExtractor
                 OnSPOULASTChanged();
             }
         }
-        private global::System.Int32 _SPOULAST;
-        partial void OnSPOULASTChanging(global::System.Int32 value);
+        private Nullable<global::System.Int64> _SPOULAST;
+        partial void OnSPOULASTChanging(Nullable<global::System.Int64> value);
         partial void OnSPOULASTChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String SCBUFF
         {
@@ -376,7 +352,7 @@ namespace TMG.DataExtractor
             {
                 OnSCBUFFChanging(value);
                 ReportPropertyChanging("SCBUFF");
-                _SCBUFF = StructuralObject.SetValidValue(value, false);
+                _SCBUFF = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("SCBUFF");
                 OnSCBUFFChanged();
             }
@@ -388,7 +364,7 @@ namespace TMG.DataExtractor
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String PBIRTH
         {
@@ -400,7 +376,7 @@ namespace TMG.DataExtractor
             {
                 OnPBIRTHChanging(value);
                 ReportPropertyChanging("PBIRTH");
-                _PBIRTH = StructuralObject.SetValidValue(value, false);
+                _PBIRTH = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("PBIRTH");
                 OnPBIRTHChanged();
             }
@@ -412,7 +388,7 @@ namespace TMG.DataExtractor
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String PDEATH
         {
@@ -424,7 +400,7 @@ namespace TMG.DataExtractor
             {
                 OnPDEATHChanging(value);
                 ReportPropertyChanging("PDEATH");
-                _PDEATH = StructuralObject.SetValidValue(value, false);
+                _PDEATH = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("PDEATH");
                 OnPDEATHChanged();
             }
@@ -456,6 +432,30 @@ namespace TMG.DataExtractor
         private global::System.String _SEX;
         partial void OnSEXChanging(global::System.String value);
         partial void OnSEXChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LIVING
+        {
+            get
+            {
+                return _LIVING;
+            }
+            set
+            {
+                OnLIVINGChanging(value);
+                ReportPropertyChanging("LIVING");
+                _LIVING = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LIVING");
+                OnLIVINGChanged();
+            }
+        }
+        private global::System.String _LIVING;
+        partial void OnLIVINGChanging(global::System.String value);
+        partial void OnLIVINGChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -580,9 +580,9 @@ namespace TMG.DataExtractor
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 RELATE
+        public Nullable<global::System.Int64> RELATE
         {
             get
             {
@@ -597,16 +597,16 @@ namespace TMG.DataExtractor
                 OnRELATEChanged();
             }
         }
-        private global::System.Int32 _RELATE;
-        partial void OnRELATEChanging(global::System.Int32 value);
+        private Nullable<global::System.Int64> _RELATE;
+        partial void OnRELATEChanging(Nullable<global::System.Int64> value);
         partial void OnRELATEChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 RELATEFO
+        public Nullable<global::System.Int64> RELATEFO
         {
             get
             {
@@ -621,14 +621,14 @@ namespace TMG.DataExtractor
                 OnRELATEFOChanged();
             }
         }
-        private global::System.Int32 _RELATEFO;
-        partial void OnRELATEFOChanging(global::System.Int32 value);
+        private Nullable<global::System.Int64> _RELATEFO;
+        partial void OnRELATEFOChanging(Nullable<global::System.Int64> value);
         partial void OnRELATEFOChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String TT
         {
@@ -640,7 +640,7 @@ namespace TMG.DataExtractor
             {
                 OnTTChanging(value);
                 ReportPropertyChanging("TT");
-                _TT = StructuralObject.SetValidValue(value, false);
+                _TT = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("TT");
                 OnTTChanged();
             }
@@ -652,7 +652,7 @@ namespace TMG.DataExtractor
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String FLAG1
         {
@@ -664,7 +664,7 @@ namespace TMG.DataExtractor
             {
                 OnFLAG1Changing(value);
                 ReportPropertyChanging("FLAG1");
-                _FLAG1 = StructuralObject.SetValidValue(value, false);
+                _FLAG1 = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("FLAG1");
                 OnFLAG1Changed();
             }
@@ -672,30 +672,6 @@ namespace TMG.DataExtractor
         private global::System.String _FLAG1;
         partial void OnFLAG1Changing(global::System.String value);
         partial void OnFLAG1Changed();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String LIVING
-        {
-            get
-            {
-                return _LIVING;
-            }
-            set
-            {
-                OnLIVINGChanging(value);
-                ReportPropertyChanging("LIVING");
-                _LIVING = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("LIVING");
-                OnLIVINGChanged();
-            }
-        }
-        private global::System.String _LIVING;
-        partial void OnLIVINGChanging(global::System.String value);
-        partial void OnLIVINGChanged();
 
         #endregion
     

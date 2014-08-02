@@ -43,8 +43,8 @@ namespace TMG.DataExtractor
 				data.FLAG1 = row.GetValue(21).ToString();
 				//data.FLAG2 = row.GetValue(22).ToString();
 
-				TMGModelContainer db = new TMGModelContainer();
-				db.Persons.AddObject(data);
+				TMGEntities db = new TMGEntities();
+				db.People.AddObject(data);
 				db.SaveChanges();
 
 				Console.WriteLine("Person Row Data Added");

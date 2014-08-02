@@ -4,126 +4,125 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="TMGModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-  <EntityContainer Name="TMGModelStoreContainer">
-    <EntitySet Name="Persons" EntityType="TMGModel.Store.Persons" store:Type="Tables" Schema="dbo" />
-  </EntityContainer>
-  <EntityType Name="Persons">
-    <Key>
-      <PropertyRef Name="PER_NO" />
-    </Key>
-    <Property Name="PER_NO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="FATHER" Type="int" Nullable="false" />
-    <Property Name="MOTHER" Type="int" Nullable="false" />
-    <Property Name="LAST_EDIT" Type="datetime" Nullable="false" />
-    <Property Name="DSID" Type="int" Nullable="false" />
-    <Property Name="REF_ID" Type="int" Nullable="false" />
-    <Property Name="REFERENCE" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="SPOULAST" Type="int" Nullable="false" />
-    <Property Name="SCBUFF" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="PBIRTH" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="PDEATH" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="SEX" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="BIRTHORDER" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="MULTIBIRTH" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="ADOPTED" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="ANCE_INT" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="DESC_INT" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="RELATE" Type="int" Nullable="false" />
-    <Property Name="RELATEFO" Type="int" Nullable="false" />
-    <Property Name="TT" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="FLAG1" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="LIVING" Type="nvarchar(max)" Nullable="false" />
-  </EntityType>
-</Schema></edmx:StorageModels>
+      <Schema Namespace="TMGModel.Store" Alias="Self" Provider="System.Data.SQLite" ProviderManifestToken="ISO8601" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="TMGModelStoreContainer">
+          <EntitySet Name="person" EntityType="TMGModel.Store.person" store:Type="Tables" />
+        </EntityContainer>
+        <EntityType Name="person">
+          <Key>
+            <PropertyRef Name="PER_NO" />
+          </Key>
+          <Property Name="PER_NO" Type="integer" Nullable="false" />
+          <Property Name="FATHER" Type="integer" />
+          <Property Name="MOTHER" Type="integer" />
+          <Property Name="LAST_EDIT" Type="datetime" Nullable="false" />
+          <Property Name="DSID" Type="integer" Nullable="false" />
+          <Property Name="REF_ID" Type="integer" />
+          <Property Name="REFERENCE" Type="varchar" MaxLength="12" />
+          <Property Name="SPOULAST" Type="integer" />
+          <Property Name="SCBUFF" Type="varchar" MaxLength="10" />
+          <Property Name="PBIRTH" Type="varchar" MaxLength="30" />
+          <Property Name="PDEATH" Type="varchar" MaxLength="30" />
+          <Property Name="SEX" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="LIVING" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="BIRTHORDER" Type="char" Nullable="false" MaxLength="2" />
+          <Property Name="MULTIBIRTH" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="ADOPTED" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="ANCE_INT" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="DESC_INT" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="RELATE" Type="integer" />
+          <Property Name="RELATEFO" Type="integer" />
+          <Property Name="TT" Type="char" MaxLength="1" />
+          <Property Name="FLAG1" Type="char" MaxLength="1" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="TMGModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
-        <EntityContainer Name="TMGModelContainer" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Persons" EntityType="TMGModel.Person" />
+      <Schema Namespace="TMGModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="TMGEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="People" EntityType="TMGModel.Person" />
         </EntityContainer>
         <EntityType Name="Person">
           <Key>
             <PropertyRef Name="PER_NO" />
           </Key>
-          <Property Type="Int32" Name="PER_NO" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="FATHER" Nullable="false" />
-          <Property Type="Int32" Name="MOTHER" Nullable="false" />
-          <Property Type="DateTime" Name="LAST_EDIT" Nullable="false" />
-          <Property Type="Int32" Name="DSID" Nullable="false" />
-          <Property Type="Int32" Name="REF_ID" Nullable="false" />
-          <Property Type="String" Name="REFERENCE" Nullable="false" />
-          <Property Type="Int32" Name="SPOULAST" Nullable="false" />
-          <Property Type="String" Name="SCBUFF" Nullable="false" />
-          <Property Type="String" Name="PBIRTH" Nullable="false" />
-          <Property Type="String" Name="PDEATH" Nullable="false" />
-          <Property Type="String" Name="SEX" Nullable="false" />
-          <Property Type="String" Name="BIRTHORDER" Nullable="false" />
-          <Property Type="String" Name="MULTIBIRTH" Nullable="false" />
-          <Property Type="String" Name="ADOPTED" Nullable="false" />
-          <Property Type="String" Name="ANCE_INT" Nullable="false" />
-          <Property Type="String" Name="DESC_INT" Nullable="false" />
-          <Property Type="Int32" Name="RELATE" Nullable="false" />
-          <Property Type="Int32" Name="RELATEFO" Nullable="false" />
-          <Property Type="String" Name="TT" Nullable="false" />
-          <Property Type="String" Name="FLAG1" Nullable="false" />
-          <Property Type="String" Name="LIVING" Nullable="false" />
+          <Property Name="PER_NO" Type="Int64" Nullable="false" />
+          <Property Name="FATHER" Type="Int64" />
+          <Property Name="MOTHER" Type="Int64" />
+          <Property Name="LAST_EDIT" Type="DateTime" Nullable="false" />
+          <Property Name="DSID" Type="Int64" Nullable="false" />
+          <Property Name="REF_ID" Type="Int64" />
+          <Property Name="REFERENCE" Type="String" MaxLength="12" Unicode="false" FixedLength="false" />
+          <Property Name="SPOULAST" Type="Int64" />
+          <Property Name="SCBUFF" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="PBIRTH" Type="String" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="PDEATH" Type="String" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="SEX" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="LIVING" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="BIRTHORDER" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Name="MULTIBIRTH" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="ADOPTED" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="ANCE_INT" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="DESC_INT" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="RELATE" Type="Int64" />
+          <Property Name="RELATEFO" Type="Int64" />
+          <Property Name="TT" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="FLAG1" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="TMGModelStoreContainer" CdmEntityContainer="TMGModelContainer">
-    <EntitySetMapping Name="Persons">
-      <EntityTypeMapping TypeName="IsTypeOf(TMGModel.Person)">
-        <MappingFragment StoreEntitySet="Persons">
-          <ScalarProperty Name="PER_NO" ColumnName="PER_NO" />
-          <ScalarProperty Name="FATHER" ColumnName="FATHER" />
-          <ScalarProperty Name="MOTHER" ColumnName="MOTHER" />
-          <ScalarProperty Name="LAST_EDIT" ColumnName="LAST_EDIT" />
-          <ScalarProperty Name="DSID" ColumnName="DSID" />
-          <ScalarProperty Name="REF_ID" ColumnName="REF_ID" />
-          <ScalarProperty Name="REFERENCE" ColumnName="REFERENCE" />
-          <ScalarProperty Name="SPOULAST" ColumnName="SPOULAST" />
-          <ScalarProperty Name="SCBUFF" ColumnName="SCBUFF" />
-          <ScalarProperty Name="PBIRTH" ColumnName="PBIRTH" />
-          <ScalarProperty Name="PDEATH" ColumnName="PDEATH" />
-          <ScalarProperty Name="SEX" ColumnName="SEX" />
-          <ScalarProperty Name="BIRTHORDER" ColumnName="BIRTHORDER" />
-          <ScalarProperty Name="MULTIBIRTH" ColumnName="MULTIBIRTH" />
-          <ScalarProperty Name="ADOPTED" ColumnName="ADOPTED" />
-          <ScalarProperty Name="ANCE_INT" ColumnName="ANCE_INT" />
-          <ScalarProperty Name="DESC_INT" ColumnName="DESC_INT" />
-          <ScalarProperty Name="RELATE" ColumnName="RELATE" />
-          <ScalarProperty Name="RELATEFO" ColumnName="RELATEFO" />
-          <ScalarProperty Name="TT" ColumnName="TT" />
-          <ScalarProperty Name="FLAG1" ColumnName="FLAG1" />
-          <ScalarProperty Name="LIVING" ColumnName="LIVING" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-  </EntityContainerMapping>
-</Mapping></edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TMGModelStoreContainer" CdmEntityContainer="TMGEntities">
+          <EntitySetMapping Name="People"><EntityTypeMapping TypeName="TMGModel.Person"><MappingFragment StoreEntitySet="person">
+            <ScalarProperty Name="PER_NO" ColumnName="PER_NO" />
+            <ScalarProperty Name="FATHER" ColumnName="FATHER" />
+            <ScalarProperty Name="MOTHER" ColumnName="MOTHER" />
+            <ScalarProperty Name="LAST_EDIT" ColumnName="LAST_EDIT" />
+            <ScalarProperty Name="DSID" ColumnName="DSID" />
+            <ScalarProperty Name="REF_ID" ColumnName="REF_ID" />
+            <ScalarProperty Name="REFERENCE" ColumnName="REFERENCE" />
+            <ScalarProperty Name="SPOULAST" ColumnName="SPOULAST" />
+            <ScalarProperty Name="SCBUFF" ColumnName="SCBUFF" />
+            <ScalarProperty Name="PBIRTH" ColumnName="PBIRTH" />
+            <ScalarProperty Name="PDEATH" ColumnName="PDEATH" />
+            <ScalarProperty Name="SEX" ColumnName="SEX" />
+            <ScalarProperty Name="LIVING" ColumnName="LIVING" />
+            <ScalarProperty Name="BIRTHORDER" ColumnName="BIRTHORDER" />
+            <ScalarProperty Name="MULTIBIRTH" ColumnName="MULTIBIRTH" />
+            <ScalarProperty Name="ADOPTED" ColumnName="ADOPTED" />
+            <ScalarProperty Name="ANCE_INT" ColumnName="ANCE_INT" />
+            <ScalarProperty Name="DESC_INT" ColumnName="DESC_INT" />
+            <ScalarProperty Name="RELATE" ColumnName="RELATE" />
+            <ScalarProperty Name="RELATEFO" ColumnName="RELATEFO" />
+            <ScalarProperty Name="TT" ColumnName="TT" />
+            <ScalarProperty Name="FLAG1" ColumnName="FLAG1" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
-    <edmx:Connection>
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
       </DesignerInfoPropertySet>
-    </edmx:Connection>
-    <edmx:Options>
+    </Connection>
+    <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
       </DesignerInfoPropertySet>
-    </edmx:Options>
+    </Options>
     <!-- Diagram content (shape and connector positions) -->
-    <edmx:Diagrams>
-      <Diagram Name="TMGModel" >
-        <EntityTypeShape EntityType="TMGModel.Person" Width="1.5" PointX="8.75" PointY="1.625" Height="4.0404058388868958" />
+    <Diagrams>
+      <Diagram Name="TMGModel">
+        <EntityTypeShape EntityType="TMGModel.Person" Width="1.5" PointX="0.75" PointY="0.75" Height="4.0404058388868958" IsExpanded="true" />
       </Diagram>
-    </edmx:Diagrams>
-  </edmx:Designer>
+    </Diagrams>
+  </Designer>
 </edmx:Edmx>
