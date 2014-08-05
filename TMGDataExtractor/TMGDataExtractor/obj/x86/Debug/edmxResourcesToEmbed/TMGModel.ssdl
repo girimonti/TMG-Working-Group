@@ -1,0 +1,519 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TMGModel.Store" Alias="Self" Provider="System.Data.SQLite" ProviderManifestToken="ISO8601" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="TMGModelStoreContainer">
+    <EntitySet Name="DataSet" EntityType="TMGModel.Store.DataSet" store:Type="Tables" />
+    <EntitySet Name="DNA" EntityType="TMGModel.Store.DNA" store:Type="Tables" />
+    <EntitySet Name="Event" EntityType="TMGModel.Store.Event" store:Type="Tables" />
+    <EntitySet Name="EventWitness" EntityType="TMGModel.Store.EventWitness" store:Type="Tables" />
+    <EntitySet Name="Exhibit" EntityType="TMGModel.Store.Exhibit" store:Type="Tables" />
+    <EntitySet Name="Flag" EntityType="TMGModel.Store.Flag" store:Type="Tables" />
+    <EntitySet Name="FocusGroup" EntityType="TMGModel.Store.FocusGroup" store:Type="Tables" />
+    <EntitySet Name="FocusGroupMember" EntityType="TMGModel.Store.FocusGroupMember" store:Type="Tables" />
+    <EntitySet Name="Name" EntityType="TMGModel.Store.Name" store:Type="Tables" />
+    <EntitySet Name="NameDictionary" EntityType="TMGModel.Store.NameDictionary" store:Type="Tables" />
+    <EntitySet Name="NamePartType" EntityType="TMGModel.Store.NamePartType" store:Type="Tables" />
+    <EntitySet Name="NamePartValue" EntityType="TMGModel.Store.NamePartValue" store:Type="Tables" />
+    <EntitySet Name="ParentChildRelationship" EntityType="TMGModel.Store.ParentChildRelationship" store:Type="Tables" />
+    <EntitySet Name="person" EntityType="TMGModel.Store.person" store:Type="Tables" />
+    <EntitySet Name="PlaceDictionary" EntityType="TMGModel.Store.PlaceDictionary" store:Type="Tables" />
+    <EntitySet Name="PlaceFile" EntityType="TMGModel.Store.PlaceFile" store:Type="Tables" />
+    <EntitySet Name="PlacePartType" EntityType="TMGModel.Store.PlacePartType" store:Type="Tables" />
+    <EntitySet Name="PlacePartValue" EntityType="TMGModel.Store.PlacePartValue" store:Type="Tables" />
+    <EntitySet Name="Repository" EntityType="TMGModel.Store.Repository" store:Type="Tables" />
+    <EntitySet Name="ResearchLog" EntityType="TMGModel.Store.ResearchLog" store:Type="Tables" />
+    <EntitySet Name="Source" EntityType="TMGModel.Store.Source" store:Type="Tables" />
+    <EntitySet Name="SourceCitation" EntityType="TMGModel.Store.SourceCitation" store:Type="Tables" />
+    <EntitySet Name="sourcetype" EntityType="TMGModel.Store.sourcetype" store:Type="Tables" />
+    <EntitySet Name="Style" EntityType="TMGModel.Store.Style" store:Type="Tables" />
+    <EntitySet Name="TagType" EntityType="TMGModel.Store.TagType" store:Type="Tables" />
+    <EntitySet Name="TimelineLock" EntityType="TMGModel.Store.TimelineLock" store:Type="Tables" />
+  </EntityContainer>
+  <EntityType Name="DataSet">
+    <Key>
+      <PropertyRef Name="DSID" />
+    </Key>
+    <Property Name="DSID" Type="integer" Nullable="false" />
+    <Property Name="DSNAME" Type="char" MaxLength="100" />
+    <Property Name="DSLOCATION" Type="char" MaxLength="253" />
+    <Property Name="DSTYPE" Type="decimal" Precision="2" />
+    <Property Name="DSLOCKED" Type="bit" />
+    <Property Name="DSENABLED" Type="bit" />
+    <Property Name="PROPERTY" Type="varchar" />
+    <Property Name="DSP" Type="varchar" />
+    <Property Name="DSP2" Type="varchar" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="DCOMMENT" Type="varchar" />
+    <Property Name="HOST" Type="varchar" />
+    <Property Name="NAMESTYLE" Type="integer" />
+    <Property Name="PLACESTYLE" Type="integer" />
+  </EntityType>
+  <EntityType Name="DNA">
+    <Key>
+      <PropertyRef Name="ID_DNA" />
+    </Key>
+    <Property Name="DSID" Type="integer" />
+    <Property Name="ID_DNA" Type="integer" Nullable="false" />
+    <Property Name="ID_PERSON" Type="integer" />
+    <Property Name="DNANAME" Type="char" MaxLength="100" />
+    <Property Name="COMMENTS" Type="varchar" />
+    <Property Name="DESCRIPT" Type="varchar" />
+    <Property Name="RESULT" Type="varchar" />
+    <Property Name="URL" Type="varchar" />
+    <Property Name="LOGO" Type="varchar" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="KITNUMBER" Type="char" MaxLength="24" />
+    <Property Name="TYPE" Type="char" MaxLength="1" />
+    <Property Name="NAMEREC" Type="integer" />
+  </EntityType>
+  <EntityType Name="Event">
+    <Key>
+      <PropertyRef Name="RECNO" />
+    </Key>
+    <Property Name="ETYPE" Type="integer" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="PER1SHOW" Type="bit" />
+    <Property Name="PER2SHOW" Type="bit" />
+    <Property Name="PER1" Type="integer" />
+    <Property Name="PER2" Type="integer" />
+    <Property Name="EDATE" Type="char" MaxLength="30" />
+    <Property Name="PLACENUM" Type="integer" />
+    <Property Name="EFOOT" Type="varchar" />
+    <Property Name="ENSURE" Type="char" MaxLength="1" />
+    <Property Name="ESSURE" Type="char" MaxLength="1" />
+    <Property Name="EDSURE" Type="char" MaxLength="1" />
+    <Property Name="EPSURE" Type="char" MaxLength="1" />
+    <Property Name="EFSURE" Type="char" MaxLength="1" />
+    <Property Name="RECNO" Type="integer" Nullable="false" />
+    <Property Name="SENTENCE" Type="varchar" />
+    <Property Name="SRTDATE" Type="char" MaxLength="30" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="REF_ID" Type="integer" />
+  </EntityType>
+  <EntityType Name="EventWitness">
+    <Key>
+      <PropertyRef Name="EventWitness_ID" />
+    </Key>
+    <Property Name="EPER" Type="integer" />
+    <Property Name="GNUM" Type="integer" />
+    <Property Name="PRIMARY" Type="bit" />
+    <Property Name="WSENTENCE" Type="varchar" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="ROLE" Type="char" MaxLength="5" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="NAMEREC" Type="integer" />
+    <Property Name="WITMEMO" Type="varchar" />
+    <Property Name="SEQUENCE" Type="integer" />
+    <Property Name="EventWitness_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="Exhibit">
+    <Key>
+      <PropertyRef Name="IDEXHIBIT" />
+    </Key>
+    <Property Name="IDEXHIBIT" Type="integer" Nullable="false" />
+    <Property Name="IDREF" Type="integer" />
+    <Property Name="RLTYPE" Type="char" MaxLength="1" />
+    <Property Name="RLNUM" Type="integer" />
+    <Property Name="XNAME" Type="char" MaxLength="30" />
+    <Property Name="VFILENAME" Type="varchar" />
+    <Property Name="IFILENAME" Type="varchar" />
+    <Property Name="AFILENAME" Type="varchar" />
+    <Property Name="TFILENAME" Type="varchar" />
+    <Property Name="REFERENCE" Type="char" MaxLength="25" />
+    <Property Name="TEXT" Type="varchar" />
+    <Property Name="IMAGE" Type="blob" />
+    <Property Name="AUDIO" Type="blob" />
+    <Property Name="DESCRIPT" Type="varchar" />
+    <Property Name="RLPER1" Type="integer" />
+    <Property Name="RLPER2" Type="integer" />
+    <Property Name="RLGTYPE" Type="integer" />
+    <Property Name="OLE_OBJECT" Type="blob" />
+    <Property Name="PRIMARY" Type="bit" />
+    <Property Name="VIDEO" Type="blob" />
+    <Property Name="PROPERTY" Type="varchar" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="ID_PERSON" Type="integer" />
+    <Property Name="ID_EVENT" Type="integer" />
+    <Property Name="ID_SOURCE" Type="integer" />
+    <Property Name="ID_REPOS" Type="integer" />
+    <Property Name="THUMB" Type="blob" />
+    <Property Name="ID_CIT" Type="integer" />
+    <Property Name="ID_PLACE" Type="integer" />
+    <Property Name="CAPTION" Type="varchar" />
+    <Property Name="SORTEXH" Type="integer" />
+    <Property Name="IMAGEFORE" Type="blob" />
+    <Property Name="IMAGEBACK" Type="blob" />
+    <Property Name="TRANSPAR" Type="decimal" Precision="53" />
+  </EntityType>
+  <EntityType Name="Flag">
+    <Key>
+      <PropertyRef Name="FLAGID" />
+    </Key>
+    <Property Name="FLAGLABEL" Type="char" MaxLength="50" />
+    <Property Name="FLAGFIELD" Type="char" MaxLength="10" />
+    <Property Name="FLAGVALUE" Type="char" MaxLength="250" />
+    <Property Name="SEQUENCE" Type="integer" />
+    <Property Name="DESCRIPT" Type="varchar" />
+    <Property Name="ACTIVE" Type="bit" />
+    <Property Name="FLAGID" Type="integer" Nullable="false" />
+    <Property Name="PROPERTY" Type="varchar" />
+    <Property Name="DSID" Type="integer" Nullable="false" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="FocusGroup">
+    <Key>
+      <PropertyRef Name="GROUPNUM" />
+    </Key>
+    <Property Name="GROUPNUM" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="GROUPNAME" Type="char" MaxLength="40" />
+    <Property Name="RECENT" Type="bit" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="FocusGroupMember">
+    <Key>
+      <PropertyRef Name="FocusGroupMember_ID" />
+    </Key>
+    <Property Name="GROUPNUM" Type="integer" />
+    <Property Name="MEMBERNUM" Type="integer" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="FocusGroupMember_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="Name">
+    <Key>
+      <PropertyRef Name="RECNO" />
+    </Key>
+    <Property Name="NPER" Type="integer" />
+    <Property Name="ALTYPE" Type="integer" />
+    <Property Name="ISPICKED" Type="bit" />
+    <Property Name="INFS" Type="bit" />
+    <Property Name="INFG" Type="bit" />
+    <Property Name="PRIMARY" Type="bit" />
+    <Property Name="NSURE" Type="char" MaxLength="1" />
+    <Property Name="FSURE" Type="char" MaxLength="1" />
+    <Property Name="NNOTE" Type="varchar" />
+    <Property Name="RECNO" Type="integer" Nullable="false" />
+    <Property Name="SENTENCE" Type="varchar" />
+    <Property Name="NDATE" Type="char" MaxLength="30" />
+    <Property Name="SRTDATE" Type="char" MaxLength="30" />
+    <Property Name="DSURE" Type="char" MaxLength="1" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="SRNAMESORT" Type="char" MaxLength="70" />
+    <Property Name="GVNAMESORT" Type="char" MaxLength="70" />
+    <Property Name="STYLEID" Type="integer" />
+    <Property Name="SURID" Type="integer" />
+    <Property Name="GIVID" Type="integer" />
+    <Property Name="SRNAMEDISP" Type="char" MaxLength="70" />
+    <Property Name="SNDXSURN" Type="char" MaxLength="4" />
+    <Property Name="SNDXGVN" Type="char" MaxLength="4" />
+    <Property Name="PBIRTH" Type="char" MaxLength="30" />
+    <Property Name="PDEATH" Type="char" MaxLength="30" />
+    <Property Name="REFER" Type="char" MaxLength="30" />
+    <Property Name="PREF_ID" Type="integer" />
+    <Property Name="LAST_EDIT" Type="datetime" />
+  </EntityType>
+  <EntityType Name="NameDictionary">
+    <Key>
+      <PropertyRef Name="NameDictionary_ID" />
+    </Key>
+    <Property Name="UID" Type="integer" />
+    <Property Name="VALUE" Type="varchar" />
+    <Property Name="SDX" Type="char" MaxLength="4" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="NameDictionary_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="NamePartType">
+    <Key>
+      <PropertyRef Name="NamePartType_ID" />
+    </Key>
+    <Property Name="ID" Type="integer" />
+    <Property Name="VALUE" Type="char" MaxLength="100" />
+    <Property Name="SYSTEM" Type="bit" />
+    <Property Name="TYPE" Type="integer" />
+    <Property Name="SHORTVALUE" Type="char" MaxLength="20" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="TEMPLATE" Type="char" MaxLength="30" />
+    <Property Name="NamePartType_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="NamePartValue">
+    <Key>
+      <PropertyRef Name="NamePartValue_ID" />
+    </Key>
+    <Property Name="RECNO" Type="integer" />
+    <Property Name="UID" Type="integer" />
+    <Property Name="TYPE" Type="integer" />
+    <Property Name="ID" Type="integer" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="NamePartValue_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="ParentChildRelationship">
+    <Key>
+      <PropertyRef Name="RECNO" />
+    </Key>
+    <Property Name="PRIMARY" Type="bit" />
+    <Property Name="CHILD" Type="integer" />
+    <Property Name="PARENT" Type="integer" />
+    <Property Name="PTYPE" Type="integer" />
+    <Property Name="PNOTE" Type="varchar" />
+    <Property Name="PSURE" Type="char" MaxLength="1" />
+    <Property Name="FSURE" Type="char" MaxLength="1" />
+    <Property Name="RECNO" Type="integer" Nullable="false" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="DSID" Type="integer" />
+  </EntityType>
+  <EntityType Name="person">
+    <Key>
+      <PropertyRef Name="PER_NO" />
+    </Key>
+    <Property Name="PER_NO" Type="integer" Nullable="false" />
+    <Property Name="FATHER" Type="integer" />
+    <Property Name="MOTHER" Type="integer" />
+    <Property Name="LAST_EDIT" Type="datetime" Nullable="false" />
+    <Property Name="DSID" Type="integer" Nullable="false" />
+    <Property Name="REF_ID" Type="integer" />
+    <Property Name="REFERENCE" Type="varchar" MaxLength="12" />
+    <Property Name="SPOULAST" Type="integer" />
+    <Property Name="SCBUFF" Type="varchar" MaxLength="10" />
+    <Property Name="PBIRTH" Type="varchar" MaxLength="30" />
+    <Property Name="PDEATH" Type="varchar" MaxLength="30" />
+    <Property Name="SEX" Type="char" Nullable="false" MaxLength="1" />
+    <Property Name="LIVING" Type="char" Nullable="false" MaxLength="1" />
+    <Property Name="BIRTHORDER" Type="char" Nullable="false" MaxLength="2" />
+    <Property Name="MULTIBIRTH" Type="char" Nullable="false" MaxLength="1" />
+    <Property Name="ADOPTED" Type="char" Nullable="false" MaxLength="1" />
+    <Property Name="ANCE_INT" Type="char" Nullable="false" MaxLength="1" />
+    <Property Name="DESC_INT" Type="char" Nullable="false" MaxLength="1" />
+    <Property Name="RELATE" Type="integer" />
+    <Property Name="RELATEFO" Type="integer" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="FLAG1" Type="char" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="PlaceDictionary">
+    <Key>
+      <PropertyRef Name="PlaceDictionary_ID" />
+    </Key>
+    <Property Name="UID" Type="integer" />
+    <Property Name="VALUE" Type="varchar" />
+    <Property Name="SDX" Type="char" MaxLength="4" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="PlaceDictionary_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="PlaceFile">
+    <Key>
+      <PropertyRef Name="RECNO" />
+    </Key>
+    <Property Name="RECNO" Type="integer" Nullable="false" />
+    <Property Name="STYLEID" Type="integer" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="STARTYEAR" Type="char" MaxLength="4" />
+    <Property Name="ENDYEAR" Type="char" MaxLength="4" />
+    <Property Name="COMMENT" Type="varchar" />
+    <Property Name="SHORTPLACE" Type="varchar" />
+  </EntityType>
+  <EntityType Name="PlacePartType">
+    <Key>
+      <PropertyRef Name="PlacePartType_ID" />
+    </Key>
+    <Property Name="ID" Type="integer" />
+    <Property Name="TYPE" Type="integer" />
+    <Property Name="VALUE" Type="char" MaxLength="100" />
+    <Property Name="SYSTEM" Type="bit" />
+    <Property Name="SHORTVALUE" Type="char" MaxLength="20" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="PlacePartType_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="PlacePartValue">
+    <Key>
+      <PropertyRef Name="PlacePartValue_ID" />
+    </Key>
+    <Property Name="RECNO" Type="integer" />
+    <Property Name="UID" Type="integer" />
+    <Property Name="TYPE" Type="integer" />
+    <Property Name="ID" Type="integer" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="PlacePartValue_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="Repository">
+    <Key>
+      <PropertyRef Name="RECNO" />
+    </Key>
+    <Property Name="DSID" Type="integer" />
+    <Property Name="NAME" Type="varchar" />
+    <Property Name="RECNO" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="REF_ID" Type="integer" />
+    <Property Name="ABBREV" Type="char" MaxLength="50" />
+    <Property Name="ADDRESS" Type="integer" />
+    <Property Name="RNOTE" Type="varchar" />
+    <Property Name="RPERNO" Type="integer" />
+    <Property Name="ISPICKED" Type="bit" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="ResearchLog">
+    <Key>
+      <PropertyRef Name="ResearchLog_ID" />
+    </Key>
+    <Property Name="RLTYPE" Type="char" MaxLength="1" />
+    <Property Name="RLNUM" Type="integer" />
+    <Property Name="RLPER1" Type="integer" />
+    <Property Name="RLPER2" Type="integer" />
+    <Property Name="RLGTYPE" Type="integer" />
+    <Property Name="TASK" Type="varchar" />
+    <Property Name="RLEDITED" Type="char" MaxLength="11" />
+    <Property Name="DESIGNED" Type="char" MaxLength="11" />
+    <Property Name="BEGUN" Type="char" MaxLength="11" />
+    <Property Name="PROGRESS" Type="char" MaxLength="11" />
+    <Property Name="COMPLETED" Type="char" MaxLength="11" />
+    <Property Name="PLANNED" Type="char" MaxLength="11" />
+    <Property Name="EXPENSES" Type="decimal" Precision="14" Scale="2" />
+    <Property Name="COMMENTS" Type="varchar" />
+    <Property Name="RLNOTE" Type="varchar" />
+    <Property Name="KEYWORDS" Type="varchar" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="ID_PERSON" Type="integer" />
+    <Property Name="ID_EVENT" Type="integer" />
+    <Property Name="ID_SOURCE" Type="integer" />
+    <Property Name="ID_REPOS" Type="integer" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="REFERENCE" Type="char" MaxLength="30" />
+    <Property Name="ResearchLog_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="Source">
+    <Key>
+      <PropertyRef Name="MAJNUM" />
+    </Key>
+    <Property Name="MACTIVE" Type="bit" />
+    <Property Name="MAJNUM" Type="integer" Nullable="false" />
+    <Property Name="REF_ID" Type="integer" />
+    <Property Name="ABBREV" Type="char" MaxLength="50" />
+    <Property Name="DEFSURE" Type="char" MaxLength="1" />
+    <Property Name="TITLE" Type="varchar" />
+    <Property Name="TYPE" Type="decimal" Precision="3" />
+    <Property Name="RECORDER" Type="decimal" Precision="2" />
+    <Property Name="MEDIA" Type="decimal" Precision="2" />
+    <Property Name="FIDELITY" Type="decimal" Precision="2" />
+    <Property Name="INDEXED" Type="decimal" Precision="1" />
+    <Property Name="STATUS" Type="decimal" Precision="2" />
+    <Property Name="TEXT" Type="varchar" />
+    <Property Name="SPERNO" Type="integer" />
+    <Property Name="ISPICKED" Type="bit" />
+    <Property Name="INFO" Type="varchar" />
+    <Property Name="FFORM" Type="varchar" />
+    <Property Name="SFORM" Type="varchar" />
+    <Property Name="BFORM" Type="varchar" />
+    <Property Name="CITED" Type="bit" />
+    <Property Name="IBIDTYPE" Type="decimal" Precision="1" />
+    <Property Name="SUBJECTID" Type="integer" />
+    <Property Name="COMPILERID" Type="integer" />
+    <Property Name="EDITORID" Type="integer" />
+    <Property Name="SPERNO2" Type="integer" />
+    <Property Name="UNCITEDFLD" Type="varchar" />
+    <Property Name="CUSTTYPE" Type="integer" />
+    <Property Name="FIRSTCD" Type="varchar" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="REMINDERS" Type="varchar" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="SourceCitation">
+    <Key>
+      <PropertyRef Name="RECNO" />
+    </Key>
+    <Property Name="RECNO" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="STYPE" Type="char" MaxLength="1" />
+    <Property Name="REFREC" Type="integer" />
+    <Property Name="MAJSOURCE" Type="integer" />
+    <Property Name="SUBSOURCE" Type="varchar" />
+    <Property Name="SNSURE" Type="char" MaxLength="1" />
+    <Property Name="SSSURE" Type="char" MaxLength="1" />
+    <Property Name="SDSURE" Type="char" MaxLength="1" />
+    <Property Name="SPSURE" Type="char" MaxLength="1" />
+    <Property Name="SFSURE" Type="char" MaxLength="1" />
+    <Property Name="ISPICKED" Type="bit" />
+    <Property Name="SEQUENCE" Type="integer" />
+    <Property Name="CITMEMO" Type="varchar" />
+    <Property Name="EXCLUDE" Type="bit" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="CITREF" Type="char" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="sourcetype">
+    <Key>
+      <PropertyRef Name="SourceType_ID" />
+    </Key>
+    <Property Name="RULESET" Type="decimal" Precision="1" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="SOURTYPE" Type="integer" />
+    <Property Name="TRANS_TO" Type="integer" />
+    <Property Name="NAME" Type="char" MaxLength="66" />
+    <Property Name="FOOT" Type="varchar" />
+    <Property Name="SHORT" Type="varchar" />
+    <Property Name="BIB" Type="varchar" />
+    <Property Name="CUSTFOOT" Type="varchar" />
+    <Property Name="CUSTSHORT" Type="varchar" />
+    <Property Name="CUSTBIB" Type="varchar" />
+    <Property Name="SAMEAS" Type="integer" />
+    <Property Name="SAMEASMSG" Type="varchar" />
+    <Property Name="PRIMARY" Type="bit" />
+    <Property Name="REMINDERS" Type="varchar" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="SourceType_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="Style">
+    <Key>
+      <PropertyRef Name="STYLEID" />
+    </Key>
+    <Property Name="STYLEID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="ST_DISPLAY" Type="varchar" />
+    <Property Name="ST_OUTPUT" Type="varchar" />
+    <Property Name="GROUP" Type="char" MaxLength="1" />
+    <Property Name="SRNAMESORT" Type="varchar" />
+    <Property Name="SRNAMEDISP" Type="varchar" />
+    <Property Name="GVNAMESORT" Type="varchar" />
+    <Property Name="GVNAMEDISP" Type="varchar" />
+    <Property Name="OTHERDISP" Type="varchar" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="STYLENAME" Type="char" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="TagType">
+    <Key>
+      <PropertyRef Name="ETYPENUM" />
+    </Key>
+    <Property Name="ISPICKED" Type="bit" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="ACTIVE" Type="bit" />
+    <Property Name="ETYPENUM" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="ORIGETYPE" Type="integer" />
+    <Property Name="ADMIN" Type="decimal" Precision="2" />
+    <Property Name="LDSONLY" Type="bit" />
+    <Property Name="ETYPENAME" Type="char" MaxLength="20" />
+    <Property Name="GEDCOM_TAG" Type="char" MaxLength="4" />
+    <Property Name="ISREPORT" Type="bit" />
+    <Property Name="TSENTENCE" Type="varchar" />
+    <Property Name="ABBREV" Type="char" MaxLength="4" />
+    <Property Name="WITDISP" Type="bit" />
+    <Property Name="PASTTENSE" Type="char" MaxLength="20" />
+    <Property Name="PRINROLE" Type="bit" />
+    <Property Name="WITROLE" Type="bit" />
+    <Property Name="MAXYEAR" Type="decimal" Precision="4" />
+    <Property Name="MINYEAR" Type="decimal" Precision="4" />
+    <Property Name="REMINDERS" Type="varchar" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="PROPERTIES" Type="varchar" />
+  </EntityType>
+  <EntityType Name="TimelineLock">
+    <Key>
+      <PropertyRef Name="TimelineLock_ID" />
+    </Key>
+    <Property Name="IDLOCK" Type="integer" />
+    <Property Name="TNAME" Type="char" MaxLength="50" />
+    <Property Name="DSID" Type="integer" />
+    <Property Name="TT" Type="char" MaxLength="1" />
+    <Property Name="TimelineLock_ID" Type="integer" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+</Schema>

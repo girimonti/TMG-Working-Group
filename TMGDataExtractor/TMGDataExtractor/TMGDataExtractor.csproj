@@ -47,7 +47,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PersonFile.cs" />
+    <Compile Include="class\FocusGroupFile.cs" />
+    <Compile Include="class\NamePartValueFile.cs" />
+    <Compile Include="class\NamePartTypeFile.cs" />
+    <Compile Include="class\NameDictionaryFile.cs" />
+    <Compile Include="class\NameFile.cs" />
+    <Compile Include="class\SourceFile.cs" />
+    <Compile Include="class\ResearchLogFile.cs" />
+    <Compile Include="class\TimelineLockFile.cs" />
+    <Compile Include="class\ExhibitFile.cs" />
+    <Compile Include="class\EventFile.cs" />
+    <Compile Include="class\ParentChildRelationshipFile.cs" />
+    <Compile Include="class\EventWitnessFile.cs" />
+    <Compile Include="class\DNAFile.cs" />
+    <Compile Include="class\StyleFile.cs" />
+    <Compile Include="class\DataSetFile.cs" />
+    <Compile Include="class\FlagFile.cs" />
+    <Compile Include="class\FocusGroupMemberFile.cs" />
+    <Compile Include="class\SourceTypeFile.cs" />
+    <Compile Include="class\PersonFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -60,7 +78,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TMGModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="VFPDataAccess.cs" />
+    <Compile Include="class\VFPDataAccess.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -78,6 +96,7 @@
     <Content Include="data\TMG.sql" />
     <Content Include="lib\sqlite3.def" />
     <Content Include="lib\sqlite3.dll" />
+    <Content Include="TMGModel.edmx.sql" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
