@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,23 +11,40 @@ namespace TMG.DataExtractor
 		public FocusGroupMemberFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = base.GetOleDbDataReader("*_b.dbf");
-			
-			foreach (DbDataRecord row in oledbReader)
+			oledbReader = base.GetOleDbDataReader("*_b.dbf");			
+
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				FocusGroupMember data = new FocusGroupMember();
+				conn.Open();
 
-				data.GROUPNUM		= (int)row["GROUPNUM"];
-				data.MEMBERNUM	= (int)row["MEMBERNUM"];
-				data.TT					= row["TT"].ToString();
-				data.DSID				= (int)row["DSID"];
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM FocusGroupMember;";
+						cmd.ExecuteNonQuery();
 
-				TMGEntities db = new TMGEntities();
-				db.FocusGroupMembers.AddObject(data);
-				
-				try { db.SaveChanges(); Tracer("Focus Group Member Rows Added: {0} {1}%");}
-				catch (Exception ex) {}// Console.WriteLine(ex.InnerException); }	
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO FocusGroupMember (GROUPNUM,MEMBERNUM,TT,DSID) ";
+							sql += string.Format("VALUES ({0},{1},'{2}',{3});",
+								(int)row["GROUPNUM"],
+								(int)row["MEMBERNUM"],
+								row["TT"].ToString(),
+								(int)row["DSID"]
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Focus Group Members Added: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+
+

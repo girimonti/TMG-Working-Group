@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,22 +11,40 @@ namespace TMG.DataExtractor
 		public NameDictionaryFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = base.GetOleDbDataReader("*_nd.dbf");
+			oledbReader = base.GetOleDbDataReader("*_nd.dbf");			
 
-			foreach (DbDataRecord row in oledbReader)
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				NameDictionary data = new NameDictionary();
-				data.UID		= (int)row["UID"];
-				data.VALUE	= row["VALUE"].ToString();
-				data.SDX		= row["SDX"].ToString();
-				data.TT			= row["TT"].ToString();
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.NameDictionaries.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM NameDictionary;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Name Dictionaries Added: {0} {1}%"); }
-				catch (Exception ex) {}//Console.WriteLine(ex.InnerException);}	 
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO NameDictionary (UID,VALUE,SDX,TT) ";
+							sql += string.Format("VALUES ({0},'{1}','{2}','{3}');",
+								 (int)row["UID"],
+								 row["VALUE"].ToString().Replace("'","`"),
+								 row["SDX"].ToString().Replace("'","`"),
+								 row["TT"].ToString()
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Name Dictionaries Added: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+
+

@@ -1,6 +1,0 @@
-C:\Documents and Settings\Administrator.CIPHER\My Documents\Visual Studio 2010\Projects\TMGDataExtractor\TMGDataExtractor\bin\Debug\TMGDataExtractor.exe.config
-C:\Documents and Settings\Administrator.CIPHER\My Documents\Visual Studio 2010\Projects\TMGDataExtractor\TMGDataExtractor\bin\Debug\TMGDataExtractor.exe
-C:\Documents and Settings\Administrator.CIPHER\My Documents\Visual Studio 2010\Projects\TMGDataExtractor\TMGDataExtractor\bin\Debug\TMGDataExtractor.pdb
-C:\Documents and Settings\Administrator.CIPHER\My Documents\Visual Studio 2010\Projects\TMGDataExtractor\TMGDataExtractor\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Documents and Settings\Administrator.CIPHER\My Documents\Visual Studio 2010\Projects\TMGDataExtractor\TMGDataExtractor\obj\x86\Debug\TMGDataExtractor.exe
-C:\Documents and Settings\Administrator.CIPHER\My Documents\Visual Studio 2010\Projects\TMGDataExtractor\TMGDataExtractor\obj\x86\Debug\TMGDataExtractor.pdb

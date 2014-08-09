@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -11,38 +13,51 @@ namespace TMG.DataExtractor
 			OleDbDataReader oledbReader;
 			oledbReader = GetOleDbDataReader("*_i.dbf");			
 			
-			foreach (DbDataRecord row in oledbReader)
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				Exhibit data = new Exhibit();
-				data.IDEXHIBIT	= (int)row["IDEXHIBIT"];
-				data.IDREF			= (int)row["IDREF"];
-				data.RLTYPE			= row["RLTYPE"].ToString();
-				data.RLNUM			= (int)row["RLNUM"];
-				data.XNAME			= row["XNAME"].ToString();
-				data.VFILENAME	= row["VFILENAME"].ToString();
-				data.IFILENAME	= row["IFILENAME"].ToString();
-				data.AFILENAME	= row["AFILENAME"].ToString();
-				data.TFILENAME	= row["TFILENAME"].ToString();
-				data.REFERENCE	= row["REFERENCE"].ToString();
-				data.TEXT				= row["TEXT"].ToString();				
-				data.DESCRIPT		= row["DESCRIPT"].ToString();
-				data.RLPER1			= (int)row["RLPER1"];
-				data.RLPER2			= (int)row["RLPER2"];
-				data.RLGTYPE		= (int)row["RLGTYPE"];
-				data.PRIMARY		= (bool)row["PRIMARY"];
-				data.PROPERTY		= row["PROPERTY"].ToString();
-				data.DSID				= (int)row["DSID"];
-				data.TT					= row["TT"].ToString();
-				data.ID_PERSON	= (int)row["ID_PERSON"];
-				data.ID_EVENT		= (int)row["ID_EVENT"];
-				data.ID_SOURCE	= (int)row["ID_SOURCE"];
-				data.ID_REPOS		= (int)row["ID_REPOS"];
+				conn.Open();
 
-				data.ID_CIT			= (int)row["ID_CIT"];
-				data.ID_PLACE		= (int)row["ID_PLACE"];
-				data.CAPTION		= row["CAPTION"].ToString();
-				data.SORTEXH		= (int)row["SORTEXH"];
-				data.TRANSPAR		= (decimal)row["TRANSPAR"];
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM Exhibit;";
+						cmd.ExecuteNonQuery();
+
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO Exhibit (IDEXHIBIT,IDREF,RLTYPE,RLNUM,XNAME,VFILENAME,IFILENAME,AFILENAME,TFILENAME,REFERENCE,TEXT,DESCRIPT,RLPER1,RLPER2,RLGTYPE,\"PRIMARY\", ";
+							sql += "PROPERTY,DSID,TT,ID_PERSON,ID_EVENT,ID_SOURCE,ID_REPOS,ID_CIT,ID_PLACE,CAPTION,SORTEXH,TRANSPAR) ";
+							sql += string.Format("VALUES ({0},{1},'{2}',{3},'{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}',{12},{13},{14},'{15}','{16}',{17},'{18}',{19},{20},{21},{22},{23},{24},'{25}',{26},{27});",
+								(int)row["IDEXHIBIT"]				 ,
+								(int)row["IDREF"]						 ,
+								row["RLTYPE"].ToString().Replace("'", "`"),
+								(int)row["RLNUM"]						 ,
+								row["XNAME"].ToString().Replace("'","`")			 ,
+								row["VFILENAME"].ToString().Replace("'", "`"),
+								row["IFILENAME"].ToString().Replace("'", "`"),
+								row["AFILENAME"].ToString().Replace("'", "`"),
+								row["TFILENAME"].ToString().Replace("'", "`"),
+								row["REFERENCE"].ToString().Replace("'", "`"),
+								row["TEXT"].ToString().Replace("'", "`"),
+								row["DESCRIPT"].ToString().Replace("'", "`"),
+								(int)row["RLPER1"]					 ,
+								(int)row["RLPER2"]					 ,
+								(int)row["RLGTYPE"]					 ,
+								(bool)row["PRIMARY"]				 ,
+								row["PROPERTY"].ToString().Replace("'", "`"),
+								(int)row["DSID"]						 ,
+								row["TT"].ToString()				 ,
+								(int)row["ID_PERSON"]				 ,
+								(int)row["ID_EVENT"]				 ,
+								(int)row["ID_SOURCE"]				 ,
+								(int)row["ID_REPOS"]				 ,
+								(int)row["ID_CIT"]					 ,
+								(int)row["ID_PLACE"]				 ,
+								row["CAPTION"].ToString().Replace("'", "`"),
+								(int)row["SORTEXH"]					 ,
+								(decimal)row["TRANSPAR"]
+							);		 
 
 				//TODO: Fix the binary data being interpreted as strings!
 				//if (row["IMAGE"] == null)
@@ -80,12 +95,17 @@ namespace TMG.DataExtractor
 				//else
 				//{ data.THUMB = (byte[])row["THUMB"]; }
 
-				TMGEntities db = new TMGEntities();
-				db.Exhibits.AddObject(data);
-				
-				try { db.SaveChanges(); Tracer("Exhibits Added: {0} {1}%");}
-				catch (Exception ex) {}// Console.WriteLine(ex.InnerException); }
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Exhibits Added: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+
+

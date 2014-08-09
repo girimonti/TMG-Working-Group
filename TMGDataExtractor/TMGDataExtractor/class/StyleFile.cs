@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -11,28 +13,45 @@ namespace TMG.DataExtractor
 			OleDbDataReader oledbReader;
 			oledbReader = base.GetOleDbDataReader("*_st.dbf");			
 
-			foreach (DbDataRecord row in oledbReader)
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				Style data = new Style();
-				data.STYLEID		= (int)row["STYLEID"];
-				data.ST_DISPLAY = row["ST_DISPLAY"].ToString();
-				data.ST_OUTPUT	= row["ST_OUTPUT"].ToString();
-				data.GROUP			= row["GROUP"].ToString();
-				data.SRNAMESORT = row["SRNAMESORT"].ToString();
-				data.SRNAMEDISP = row["SRNAMEDISP"].ToString();
-				data.GVNAMESORT = row["GVNAMESORT"].ToString();
-				data.GVNAMEDISP = row["GVNAMEDISP"].ToString();
-				data.OTHERDISP	= row["OTHERDISP"].ToString();
-				data.TT					= row["TT"].ToString();
-				data.DSID				= (int)row["DSID"];
-				data.STYLENAME	= row["STYLENAME"].ToString();
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.Styles.AddObject(data);
-				
-				try { db.SaveChanges(); Tracer("Styles Added: {0} {1}%");}
-				catch (Exception ex) {}// Console.WriteLine(ex.InnerException); }
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM Style;";
+						cmd.ExecuteNonQuery();
+
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO Style (STYLEID,ST_DISPLAY,ST_OUTPUT,\"GROUP\",SRNAMESORT,SRNAMEDISP,GVNAMESORT,GVNAMEDISP,OTHERDISP,TT,DSID,STYLENAME) ";
+							sql += string.Format("VALUES ({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}',{10},'{11}');",
+									(int)row["STYLEID"],
+									row["ST_DISPLAY"].ToString().Replace("'","`"),
+									row["ST_OUTPUT"].ToString().Replace("'","`"),
+									row["GROUP"].ToString().Replace("'","`"),
+									row["SRNAMESORT"].ToString().Replace("'","`"),
+									row["SRNAMEDISP"].ToString().Replace("'","`"),
+									row["GVNAMESORT"].ToString().Replace("'","`"),
+									row["GVNAMEDISP"].ToString().Replace("'","`"),
+									row["OTHERDISP"].ToString().Replace("'","`"),
+									row["TT"].ToString().Replace("'","`"),
+									(int)row["DSID"],
+									row["STYLENAME"].ToString().Replace("'","`")
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Styles: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+

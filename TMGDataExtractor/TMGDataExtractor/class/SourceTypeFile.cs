@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,34 +11,51 @@ namespace TMG.DataExtractor
 		public SourceTypeFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = base.GetOleDbDataReader("*_a.dbf");
+			oledbReader = base.GetOleDbDataReader("*_a.dbf");			
 
-			foreach (DbDataRecord row in oledbReader)
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				SourceType data = new SourceType();
-				data.RULESET		= (decimal)row["RULESET"];
-				data.DSID				= (int)row["DSID"];
-				data.SOURTYPE		= (int)row["SOURTYPE"];
-				data.TRANS_TO		= (int)row["TRANS_TO"];
-				data.NAME				= row["NAME"].ToString();
-				data.FOOT				= row["FOOT"].ToString(); 
-				data.SHORT			= row["SHORT"].ToString();
-				data.BIB				= row["BIB"].ToString();
-				data.CUSTFOOT		= row["CUSTFOOT"].ToString();
-				data.CUSTSHORT	= row["CUSTSHORT"].ToString();
-				data.CUSTBIB		= row["CUSTBIB"].ToString();
-				data.SAMEAS			= (int)row["SAMEAS"];
-				data.SAMEASMSG	= row["SAMEASMSG"].ToString();
-				data.PRIMARY		= (bool)row["PRIMARY"];
-				data.REMINDERS	= row["REMINDERS"].ToString();
-				data.TT					= row["TT"].ToString();
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.SourceTypes.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM SourceType;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Source Types Added: {0} {1}%");}
-				catch (Exception ex) {}// Console.WriteLine(ex.InnerException); }
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO SourceType (RULESET,DSID,SOURTYPE,TRANS_TO,NAME,FOOT,SHORT,BIB,CUSTFOOT,CUSTSHORT,CUSTBIB,SAMEAS,SAMEASMSG,\"PRIMARY\",REMINDERS,TT) ";
+							sql += string.Format("VALUES ({0},{1},{2},{3},'{4}','{5}','{6}','{7}','{8}','{9}','{10}',{11},'{12}','{13}','{14}','{15}');",
+									(decimal)row["RULESET"],
+									(int)row["DSID"],
+									(int)row["SOURTYPE"],
+									(int)row["TRANS_TO"],
+									row["NAME"].ToString().Replace("'","`"),
+									row["FOOT"].ToString().Replace("'","`"), 
+									row["SHORT"].ToString().Replace("'","`"),
+									row["BIB"].ToString().Replace("'","`"),
+									row["CUSTFOOT"].ToString().Replace("'","`"),
+									row["CUSTSHORT"].ToString().Replace("'","`"),
+									row["CUSTBIB"].ToString().Replace("'","`"),
+									(int)row["SAMEAS"],
+									row["SAMEASMSG"].ToString().Replace("'","`"),
+									(bool)row["PRIMARY"],
+									row["REMINDERS"].ToString().Replace("'","`"),
+									row["TT"].ToString().Replace("'","`")
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Source Types: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+

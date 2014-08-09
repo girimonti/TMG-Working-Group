@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -11,28 +13,43 @@ namespace TMG.DataExtractor
 			OleDbDataReader oledbReader;
 			oledbReader = base.GetOleDbDataReader("*_e.dbf");			
 			
-
-			foreach (DbDataRecord row in oledbReader)
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				EventWitness data = new EventWitness();
-				data.EPER				= (int)row["EPER"];
-				data.GNUM				= (int)row["GNUM"];
-				data.PRIMARY		= (bool)row["PRIMARY"];
-				data.WSENTENCE	= row["WSENTENCE"].ToString();
-				data.TT					= row["TT"].ToString();
-				data.ROLE				= row["ROLE"].ToString();
-				data.DSID				= (int)row["DSID"];
-				data.NAMEREC		= (int)row["NAMEREC"];
-				data.WITMEMO		= row["WITMEMO"].ToString();
-				data.TT					= row["TT"].ToString();
-				data.SEQUENCE		= (int)row["SEQUENCE"];
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.EventWitnesses.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM EventWitness;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Event Witnesses Added: {0} {1}%");}
-				catch (Exception ex) {}// Console.WriteLine(ex.InnerException); }			
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO EventWitness (EPER,GNUM,\"PRIMARY\",WSENTENCE,TT,ROLE,DSID,NAMEREC,WITMEMO,SEQUENCE) ";
+							sql += string.Format("VALUES({0},{1},'{2}','{3}','{4}','{5}',{6},{7},'{8}',{9});",
+							(int)row["EPER"],
+							(int)row["GNUM"],
+							(bool)row["PRIMARY"],
+							row["WSENTENCE"].ToString(),
+							row["TT"].ToString(),
+							row["ROLE"].ToString(),
+							(int)row["DSID"],
+							(int)row["NAMEREC"],
+							row["WITMEMO"].ToString(),
+							(int)row["SEQUENCE"]);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Event Witnesses Added: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+
+

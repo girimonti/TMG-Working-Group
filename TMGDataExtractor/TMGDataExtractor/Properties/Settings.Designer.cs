@@ -32,5 +32,16 @@ namespace TMG.DataExtractor.Properties {
                 return ((string)(this["ConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Documents and Settings\\Administrator.CIPHER\\My Documents\\Visual S" +
+            "tudio 2010\\Projects\\TMGDataExtractor\\TMGDataExtractor\\data\\tmg\"")]
+        public string tmgConnectionString {
+            get {
+                return ((string)(this["tmgConnectionString"]));
+            }
+        }
     }
 }

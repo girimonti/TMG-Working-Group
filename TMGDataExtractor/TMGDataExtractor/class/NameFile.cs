@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,47 +11,65 @@ namespace TMG.DataExtractor
 		public NameFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = GetOleDbDataReader("*_n.dbf");			
-			
-			foreach (DbDataRecord row in oledbReader)
+			oledbReader = base.GetOleDbDataReader("*_n.dbf");			
+
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				Name data = new Name();
-				data.NPER				= (int)row["NPER"];
-				data.ALTYPE			= (int)row["ALTYPE"];
-				data.ISPICKED		= (bool)row["ISPICKED"];
-				data.INFS				= (bool)row["INFS"];
-				data.INFG				= (bool)row["INFG"];
-				data.PRIMARY		= (bool)row["PRIMARY"];
-				data.NSURE			= row["NSURE"].ToString();
-				data.FSURE			= row["FSURE"].ToString();
-				data.NNOTE			= row["NNOTE"].ToString();
-				data.RECNO			= (int)row["RECNO"];
-				data.SENTENCE		= row["SENTENCE"].ToString();
-				data.NDATE			= row["NDATE"].ToString();
-				data.SRTDATE		= row["SRTDATE"].ToString();
-				data.DSURE			= row["DSURE"].ToString();
-				data.DSID				= (int)row["DSID"];
-				data.TT					= row["TT"].ToString();
-				data.SRNAMESORT = row["SRNAMESORT"].ToString();
-				data.GVNAMESORT = row["GVNAMESORT"].ToString();
-				data.STYLEID		= (int)row["STYLEID"];
-				data.SURID			= (int)row["SURID"];
-				data.GIVID			= (int)row["GIVID"];
-				data.SRNAMEDISP = row["SRNAMEDISP"].ToString();
-				data.SNDXSURN		= row["SNDXSURN"].ToString();
-				data.SNDXGVN		= row["SNDXGVN"].ToString();
-				data.PBIRTH			= row["PBIRTH"].ToString();
-				data.PDEATH			= row["PDEATH"].ToString();
-				data.REFER			= row["REFER"].ToString();
-				data.PREF_ID		= (int)row["PREF_ID"];
-				data.LAST_EDIT	= (DateTime)row["LAST_EDIT"];
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.Names.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM Name;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Names Added: {0} {1}%"); }
-				catch (Exception ex) {}// Console.WriteLine(ex.InnerException); }
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO Name (NPER,ALTYPE,ISPICKED,INFS,INFG,\"PRIMARY\",NSURE,FSURE,NNOTE,RECNO,SENTENCE,NDATE,SRTDATE,DSURE,DSID,TT,SRNAMESORT,GVNAMESORT,STYLEID,SURID,GIVID,SRNAMEDISP,SNDXSURN,SNDXGVN,PBIRTH,PDEATH,REFER,PREF_ID,LAST_EDIT) ";
+							sql += string.Format("VALUES ({0},{1},'{2}','{3}','{4}','{5}','{6}','{7}','{8}',{9},'{10}','{11}','{12}','{13}',{14},'{15}','{16}','{17}',{18},{19},{20},'{21}','{22}','{23}','{24}','{25}','{26}',{27},'{28}');",
+								 (int)row["NPER"], 								 
+								 (int)row["ALTYPE"], 							 
+								 (bool)row["ISPICKED"],
+								 (bool)row["INFS"],								 
+								 (bool)row["INFG"],								 
+								 (bool)row["PRIMARY"],
+								 row["NSURE"].ToString().Replace("'", "`"),
+								 row["FSURE"].ToString().Replace("'", "`"),
+								 row["NNOTE"].ToString().Replace("'", "`"),
+								 (int)row["RECNO"],
+								 row["SENTENCE"].ToString().Replace("'", "`"),
+								 row["NDATE"].ToString().Replace("'", "`"),
+								 row["SRTDATE"].ToString().Replace("'", "`"),
+								 row["DSURE"].ToString().Replace("'", "`"),					 
+								 (int)row["DSID"],
+								 row["TT"].ToString(),
+								 row["SRNAMESORT"].ToString().Replace("'", "`"),
+								 row["GVNAMESORT"].ToString().Replace("'", "`"),
+								 (int)row["STYLEID"],							 
+								 (int)row["SURID"],								 
+								 (int)row["GIVID"],
+								 row["SRNAMEDISP"].ToString().Replace("'", "`"),
+								 row["SNDXSURN"].ToString().Replace("'", "`"),
+								 row["SNDXGVN"].ToString().Replace("'", "`"),
+								 row["PBIRTH"].ToString().Replace("'", "`"),
+								 row["PDEATH"].ToString().Replace("'", "`"),
+								 row["REFER"].ToString().Replace("'", "`"),
+								 (int)row["PREF_ID"],							 
+								 (DateTime)row["LAST_EDIT"]
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Names Added: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+
+

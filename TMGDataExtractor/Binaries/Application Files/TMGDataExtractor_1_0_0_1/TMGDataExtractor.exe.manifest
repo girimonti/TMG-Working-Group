@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1">
+  <asmv1:assemblyIdentity name="TMGDataExtractor.exe" version="1.0.0.1" publicKeyToken="ea48131edce6c1a2" language="neutral" processorArchitecture="x86" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="TMGDataExtractor" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+    <commandLine file="TMGDataExtractor.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the 
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward 
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="System.Data.SQLite" version="1.0.93.0" publicKeyToken="DB937BC2D44FF139" language="neutral" processorArchitecture="x86" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TMGDataExtractor.exe" size="1031680">
+      <assemblyIdentity name="TMGDataExtractor" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>+zKBVI/rzjXJYqGk+fMUQdRkS4Y=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="lib\sqlite3.def" size="4444">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>scg2L+FvSpRcowTUiofzIjbxW6Y=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="lib\sqlite3.dll" size="650725">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>T+IXyF6R0658Rqy8A7nKZWWimpI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="TMGDataExtractor.exe.config" size="601">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>S+ok2bgf1Aq00M2Bs5TaCyxaBPU=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=CIPHER\Administrator" issuerKeyHash="f5aaf9927fd43dc837d06b3f71b85949412a5f31" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>4Bdehvv3SJDH0pusXDTLkz4Ix2g=</DigestValue></Reference></SignedInfo><SignatureValue>YQCh9Y98yNWYpJJ+OiAi5KbPl6lghs2DhuwB5BqzfBB0f5a3NyXuqwaoK6z92XbpeMVou6IJh82pN/8a7kfLXeWqR5KjSMbA1VKEIEVvKB7eg7WkpYUbn0LW9lp1UDI+Vsq4CkyB9tndTyii0dLEENOXfUp4FVlpB5jRp6qgzEk=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>lOUm+COpwmqcKciYgn1On4KF91ky61jdF2agIu4u2iwA+iH7lQwVZaeCJGE3wsbsfDNvECkXp9SLyNfS8AAm4j3No86KHCh6mUuheBkN77QVfW9kn85IBvWIXVaxYxCpnfJO1oLRQbqWUm/NA/Jp9MedDvEp6m138bb0wgyluGM=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="68c7083e93cb345cac9bd2c79048f7fb865e17e0" Description="" Url=""><as:assemblyIdentity name="TMGDataExtractor.exe" version="1.0.0.1" publicKeyToken="ea48131edce6c1a2" language="neutral" processorArchitecture="x86" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=CIPHER\Administrator</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>LK+ewkFxd4+lKagEM4bn4z2kM/U=</DigestValue></Reference></SignedInfo><SignatureValue>PRA7uNiOQ6vq3eEnV7yNp75yUSOgUEK+nPWLcAUgJ4ec4Q2lFmvQMOEGjE/LeWetMlbAEGqHn6ft7TcpbS4mCTlbUFi87G62wHRHtbA7AxbqIzQPLYrJ9xt6HcK9dIixxkphDvHrQtLN4BFcup4vG6MURvj6PWEQ9+GXtGw+rsw=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>lOUm+COpwmqcKciYgn1On4KF91ky61jdF2agIu4u2iwA+iH7lQwVZaeCJGE3wsbsfDNvECkXp9SLyNfS8AAm4j3No86KHCh6mUuheBkN77QVfW9kn85IBvWIXVaxYxCpnfJO1oLRQbqWUm/NA/Jp9MedDvEp6m138bb0wgyluGM=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB4TCCAU6gAwIBAgIQYdCxD7uYuL5OPKfyhwb8qzAJBgUrDgMCHQUAMDMxMTAvBgNVBAMeKABDAEkAUABIAEUAUgBcAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIwHhcNMTQwODA5MTMxOTU1WhcNMTUwODA5MTkxOTU1WjAzMTEwLwYDVQQDHigAQwBJAFAASABFAFIAXABBAGQAbQBpAG4AaQBzAHQAcgBhAHQAbwByMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCU5Sb4I6nCapwpyJiCfU6fgoX3WTLrWN0XZqAi7i7aLAD6IfuVDBVlp4IkYTfCxux8M28QKRen1IvI19LwACbiPc2jzoocKHqZS6F4GQ3vtBV9b2SfzkgG9YhdVrFjEKmd8k7WgtFBupZSb80D8mn0x50O8SnqbXfxtvTCDKW4YwIDAQABMAkGBSsOAwIdBQADgYEAOVZxvnb2cmw+QYuLIWboFCMIpP7VXZYhISML1o4mDvcOoSCTk04iPatliVqb8tvLX9xHDPirURjzv2G1uDqigWe6vmtQdhRn7QfGEW11WvF1ScHXHCFCl6xdfgH3HA/V28jAYEhUTktRoh7UvnEabMWAQud7dSj6ri6klxLOrxY=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

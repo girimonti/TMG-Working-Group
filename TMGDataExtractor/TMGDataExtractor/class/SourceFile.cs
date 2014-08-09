@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,49 +11,67 @@ namespace TMG.DataExtractor
 		public SourceFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = GetOleDbDataReader("*_m.dbf");			
-			
-			foreach (DbDataRecord row in oledbReader)
+			oledbReader = base.GetOleDbDataReader("*_m.dbf");			
+
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				Source data = new Source();
-				data.MACTIVE		= (bool)row["MACTIVE"];
-				data.MAJNUM			= (int)row["MAJNUM"];
-				data.REF_ID			= (int)row["REF_ID"];
-				data.ABBREV			= row["ABBREV"].ToString();
-				data.DEFSURE		= row["DEFSURE"].ToString();
-				data.TITLE			= row["TITLE"].ToString();
-				data.TYPE				= (decimal)row["TYPE"];
-				data.RECORDER		= (decimal)row["RECORDER"];
-				data.MEDIA			= (decimal)row["MEDIA"];
-				data.FIDELITY		= (decimal)row["FIDELITY"];
-				data.INDEXED		= (decimal)row["INDEXED"];
-				data.STATUS			= (decimal)row["STATUS"];
-				data.TEXT				= row["TEXT"].ToString();
-				data.SPERNO			= (int)row["SPERNO"];
-				data.ISPICKED		= (bool)row["ISPICKED"];
-				data.INFO				= row["INFO"].ToString();
-				data.FFORM			= row["FFORM"].ToString();
-				data.SFORM			= row["SFORM"].ToString();
-				data.BFORM			= row["BFORM"].ToString();
-				data.CITED			= (bool)row["CITED"];
-				data.IBIDTYPE		= (decimal)row["IBIDTYPE"];
-				data.SUBJECTID	= (int)row["SUBJECTID"];
-				data.COMPILERID	= (int)row["COMPILERID"];
-				data.EDITORID		= (int)row["EDITORID"];
-				data.SPERNO2		= (int)row["SPERNO2"];
-				data.UNCITEDFLD = row["UNCITEDFLD"].ToString();
-				data.CUSTTYPE		= (int)row["CUSTTYPE"];
-				data.FIRSTCD		= row["FIRSTCD"].ToString();
-				data.DSID				= (int)row["DSID"];
-				data.REMINDERS	= row["REMINDERS"].ToString();
-				data.TT					= row["TT"].ToString();
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.Sources.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM Source;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Sources Added: {0} {1}%"); }
-				catch (Exception ex) {}// Console.WriteLine(ex.InnerException); }
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO Source (MACTIVE,MAJNUM,REF_ID,ABBREV,DEFSURE,TITLE,TYPE,RECORDER,MEDIA,FIDELITY,INDEXED,STATUS,TEXT,SPERNO,ISPICKED,";
+							sql += "INFO,FFORM,SFORM,BFORM,CITED,IBIDTYPE,SUBJECTID,COMPILERID,EDITORID,SPERNO2,UNCITEDFLD,CUSTTYPE,FIRSTCD,DSID,REMINDERS,TT) ";
+							sql += string.Format("VALUES ('{0}',{1},{2},'{3}','{4}','{5}',{6},{7},{8},{9},{10},{11},'{12}',{13},'{14}','{15}','{16}','{17}','{18}','{19}',{20},{21},{22},{23},{24},'{25}',{26},'{27}',{28},'{29}','{30}');",
+									(bool)row["MACTIVE"],
+									(int)row["MAJNUM"],
+									(int)row["REF_ID"],
+									row["ABBREV"].ToString().Replace("'","`"),
+									row["DEFSURE"].ToString().Replace("'","`"),
+									row["TITLE"].ToString().Replace("'","`"),
+									(decimal)row["TYPE"],
+									(decimal)row["RECORDER"],
+									(decimal)row["MEDIA"],
+									(decimal)row["FIDELITY"],
+									(decimal)row["INDEXED"],
+									(decimal)row["STATUS"],
+									row["TEXT"].ToString().Replace("'","`"),
+									(int)row["SPERNO"],
+									(bool)row["ISPICKED"],
+									row["INFO"].ToString().Replace("'","`"),
+									row["FFORM"].ToString().Replace("'","`"),
+									row["SFORM"].ToString().Replace("'","`"),
+									row["BFORM"].ToString().Replace("'","`"),
+									(bool)row["CITED"],
+									(decimal)row["IBIDTYPE"],
+									(int)row["SUBJECTID"],
+									(int)row["COMPILERID"],
+									(int)row["EDITORID"],
+									(int)row["SPERNO2"],
+									row["UNCITEDFLD"].ToString().Replace("'","`"),
+									(int)row["CUSTTYPE"],
+									row["FIRSTCD"].ToString().Replace("'","`"),
+									(int)row["DSID"],
+									row["REMINDERS"].ToString().Replace("'","`"),
+									row["TT"].ToString().Replace("'","`")
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Sources: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+

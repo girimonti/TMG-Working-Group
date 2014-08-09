@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,28 +11,45 @@ namespace TMG.DataExtractor
 		public ParentChildRelationshipFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = GetOleDbDataReader("*_f.dbf");			
-			
-			foreach (DbDataRecord row in oledbReader)
+			oledbReader = base.GetOleDbDataReader("*_f.dbf");			
+
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				ParentChildRelationship data = new ParentChildRelationship();
-				data.PRIMARY	= (bool)row["PRIMARY"];
-				data.CHILD		= (int)row["CHILD"];
-				data.PARENT		= (int)row["PARENT"];
-				data.PTYPE		= (int)row["PTYPE"];
-				data.PNOTE		= row["PNOTE"].ToString();
-				data.PSURE		= row["PSURE"].ToString();
-				data.FSURE		= row["FSURE"].ToString();
-				data.RECNO		= (int)row["RECNO"];
-				data.TT				= row["TT"].ToString();
-				data.DSID			= (int)row["DSID"];
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.ParentChildRelationships.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM ParentChildRelationship;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Parent/Child Relationships Added: {0} {1}%");}
-				catch (Exception ex) {}// Console.WriteLine(ex.InnerException); }
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO ParentChildRelationship (\"PRIMARY\",CHILD,PARENT,PTYPE,PNOTE,PSURE,FSURE,RECNO,TT,DSID) ";
+							sql += string.Format("VALUES ('{0}',{1},{2},{3},'{4}','{5}','{6}',{7},'{8}',{9});",
+								 (bool)row["PRIMARY"],
+								 (int)row["CHILD"],
+								 (int)row["PARENT"],
+								 (int)row["PTYPE"],
+								 row["PNOTE"].ToString().Replace("'", "`"),
+								 row["PSURE"].ToString().Replace("'", "`"),
+								 row["FSURE"].ToString().Replace("'", "`"),
+								 (int)row["RECNO"],
+								 row["TT"].ToString(),
+								 (int)row["DSID"]
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Parent Child Relationships: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+

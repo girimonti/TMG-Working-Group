@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,22 +11,39 @@ namespace TMG.DataExtractor
 		public TimelineLockFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = base.GetOleDbDataReader("*_k.dbf");
-			
-			foreach (DbDataRecord row in oledbReader)
+			oledbReader = base.GetOleDbDataReader("*_k.dbf");			
+
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				TimelineLock data = new TimelineLock();
-				data.IDLOCK = (int)row["IDLOCK"];
-				data.TNAME	= row["TNAME"].ToString();
-				data.DSID		= (int)row["DSID"];
-				data.TT			= row["TT"].ToString();
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.TimelineLocks.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM TimelineLock;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Timeline Locks Added: {0} {1}%"); }
-				catch (Exception ex) {}//Console.WriteLine(ex.InnerException);}	 
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO TimelineLock (IDLOCK,TNAME,DSID,TT) ";
+							sql += string.Format("VALUES ({0},'{1}',{2},'{3}');",
+									(int)row["IDLOCK"],
+									row["TNAME"].ToString().Replace("'","`"),
+									(int)row["DSID"],
+									row["TT"].ToString().Replace("'","`")
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Timeline Locks: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+

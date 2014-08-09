@@ -6,7 +6,6 @@ namespace TMG.DataExtractor
 	class Program
 	{
 		private static string displayMessage = string.Empty;
-		private static int timerCount = 0;
 
 		static void Main(string[] args)
 		{
@@ -16,8 +15,9 @@ namespace TMG.DataExtractor
 
 			Console.Clear();
 			Console.ForegroundColor = ConsoleColor.Cyan;
-			Console.SetWindowSize(80, 24);
-			Console.SetBufferSize(80, 24);
+			Console.SetWindowSize(80, 40);
+			Console.SetBufferSize(80, 40);
+			Console.Beep();
 			Console.Title = "Migrating Data From TMG";
 
 			PersonFile person = new PersonFile();
@@ -119,5 +119,7 @@ namespace TMG.DataExtractor
 			decimal percentage = ((decimal)Number / 29) * 100;
 			Console.Title = string.Format("Migrating Data From TMG: {0}% Complete", decimal.Round(percentage, 0).ToString());
 		}
+
+
 	}
 }

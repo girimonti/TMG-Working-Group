@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,26 +11,43 @@ namespace TMG.DataExtractor
 		public NamePartTypeFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = base.GetOleDbDataReader("*_npt.dbf");
+			oledbReader = base.GetOleDbDataReader("*_npt.dbf");			
 
-			foreach (DbDataRecord row in oledbReader)
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				NamePartType data = new NamePartType();
-				data.ID					= (int)row["ID"];
-				data.VALUE			= row["VALUE"].ToString();
-				data.SYSTEM			= (bool)row["SYSTEM"];
-				data.TYPE				= (int)row["TYPE"];
-				data.SHORTVALUE = row["SHORTVALUE"].ToString();
-				data.TT					= row["TT"].ToString();
-				data.DSID				= (int)row["DSID"];
-				data.TEMPLATE		= row["TEMPLATE"].ToString();
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.NamePartTypes.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM NamePartType;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Name Part Types Added: {0} {1}%"); }
-				catch (Exception ex) {}//Console.WriteLine(ex.InnerException);}	 
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO NamePartType (ID,VALUE,SYSTEM,TYPE,SHORTVALUE,TT,DSID,TEMPLATE) ";
+							sql += string.Format("VALUES ({0},'{1}','{2}',{3},'{4}','{5}',{6},'{7}');",
+									(int)row["ID"],
+									row["VALUE"].ToString().Replace("'", "`"),
+									(bool)row["SYSTEM"],
+									(int)row["TYPE"],
+									row["SHORTVALUE"].ToString().Replace("'", "`"),
+									row["TT"].ToString(),
+									(int)row["DSID"],
+									row["TEMPLATE"].ToString().Replace("'", "`")
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Name Part Types: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+

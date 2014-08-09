@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,24 +11,41 @@ namespace TMG.DataExtractor
 		public NamePartValueFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = base.GetOleDbDataReader("*_npv.dbf");
+			oledbReader = base.GetOleDbDataReader("*_npv.dbf");			
 
-			foreach (DbDataRecord row in oledbReader)
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				NamePartValue data = new NamePartValue();
-				data.RECNO	= (int)row["RECNO"];
-				data.UID		= (int)row["UID"];
-				data.TYPE		= (int)row["TYPE"];
-				data.ID			= (int)row["ID"];
-				data.TT			= row["TT"].ToString();
-				data.DSID		= (int)row["DSID"];
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.NamePartValues.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM NamePartValue;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Name Part Values Added: {0} {1}%"); }
-				catch (Exception ex) {}//Console.WriteLine(ex.InnerException);}	 
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO NamePartValue (RECNO,UID,TYPE,ID,TT,DSID) ";
+							sql += string.Format("VALUES ({0},{1},{2},{3},'{4}',{5});",
+									(int)row["RECNO"],
+									(int)row["UID"],
+									(int)row["TYPE"],
+									(int)row["ID"],
+									row["TT"].ToString(),
+									(int)row["DSID"]
+							);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("Name Part Values: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+

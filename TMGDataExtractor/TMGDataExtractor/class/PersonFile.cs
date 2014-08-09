@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -9,42 +11,60 @@ namespace TMG.DataExtractor
 		public PersonFile()
 		{
 			OleDbDataReader oledbReader;
-			oledbReader = base.GetOleDbDataReader("*_$.dbf");			
-
-			foreach (DbDataRecord row in oledbReader)
+			oledbReader = base.GetOleDbDataReader("*_$.dbf");
+			
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				Person data = new Person();
-				data.PER_NO			= (int)row["PER_NO"];
-				data.FATHER			= (int)row["FATHER"];
-				data.MOTHER			= (int)row["MOTHER"];
-				data.LAST_EDIT	= (DateTime)row["LAST_EDIT"];
-				data.DSID				= (int)row["DSID"];
-				data.REF_ID			= (int)row["REF_ID"];
-				data.REFERENCE	= row["REFERENCE"].ToString();
-				data.SPOULAST		= (int)row["SPOULAST"];
-				data.SCBUFF			= row["SCBUFF"].ToString();
-				data.PBIRTH			= row["PBIRTH"].ToString();
-				data.PDEATH			= row["PDEATH"].ToString();
-				data.SEX				= row["SEX"].ToString();
-				data.LIVING			= row["LIVING"].ToString();
-				data.BIRTHORDER = row["BIRTHORDER"].ToString();
-				data.MULTIBIRTH = row["MULTIBIRTH"].ToString();
-				data.ADOPTED		= row["ADOPTED"].ToString();
-				data.ANCE_INT		= row["ANCE_INT"].ToString();
-				data.DESC_INT		= row["DESC_INT"].ToString();
-				data.RELATE			= (int)row["RELATE"];
-				data.RELATEFO		= (int)row["RELATEFO"];
-				data.TT					= row["TT"].ToString();
-				data.FLAG1			= row["FLAG1"].ToString();
-				//data.FLAG2 = row.GetValue(22).ToString();
-				//TODO: Need to add the dynamically generated flag columns
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.People.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM Person;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("People Added: {0} {1}%");}
-				catch (Exception ex) {}// Console.WriteLine(ex.InnerException); }
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql =	"INSERT INTO Person (";
+							sql += "PER_NO, FATHER, MOTHER, LAST_EDIT, DSID, REF_ID, REFERENCE, SPOULAST, SCBUFF, PBIRTH, PDEATH, SEX, LIVING, ";
+							sql += "BIRTHORDER, MULTIBIRTH, ADOPTED, ANCE_INT, DESC_INT, RELATE, RELATEFO, TT, FLAG1) VALUES (";
+							sql += string.Format("{0},{1},{2},'{3}',{4},{5},'{6}',{7},'{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}',{18},{19},'{20}','{21}');",
+							(int)row["PER_NO"], 
+							(int)row["FATHER"],
+							(int)row["MOTHER"],
+							(DateTime)row["LAST_EDIT"],
+							(int)row["DSID"],
+							(int)row["REF_ID"],
+							row["REFERENCE"].ToString().Replace("'", "`"),
+							(int)row["SPOULAST"],
+							row["SCBUFF"].ToString().Replace("'", "`"),
+							row["PBIRTH"].ToString().Replace("'", "`"),
+							row["PDEATH"].ToString().Replace("'", "`"),
+							row["SEX"].ToString().Replace("'", "`"),
+							row["LIVING"].ToString().Replace("'", "`"),
+							row["BIRTHORDER"].ToString().Replace("'", "`"),
+							row["ADOPTED"].ToString().Replace("'", "`"),
+							row["MULTIBIRTH"].ToString().Replace("'", "`"),
+							row["ANCE_INT"].ToString().Replace("'", "`"),
+							row["DESC_INT"].ToString().Replace("'", "`"),
+							(int)row["RELATE"],
+							(int)row["RELATEFO"],
+							row["TT"].ToString(),
+							row["FLAG1"].ToString());
+							//TODO: Need to add the dynamically generated flag columns
+							
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+							Tracer("People Added: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+
+

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Configuration;
 
 namespace TMG.DataExtractor
 {
@@ -11,35 +13,53 @@ namespace TMG.DataExtractor
 			OleDbDataReader oledbReader;
 			oledbReader = GetOleDbDataReader("*_g.dbf");			
 			
-			foreach (DbDataRecord row in oledbReader)
+			using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["TMG.DataExtractor.Properties.Settings.tmgConnectionString"].ToString()))
 			{
-				Event data = new Event();
-				data.ETYPE		= (int)row["ETYPE"];
-				data.DSID			= (int)row["DSID"];
-				data.PER1SHOW = (bool)row["PER1SHOW"];
-				data.PER2SHOW = (bool)row["PER2SHOW"];
-				data.PER1			= (int)row["PER1"];
-				data.PER2			= (int)row["PER2"];
-				data.EDATE		= row["EDATE"].ToString();
-				data.PLACENUM = (int)row["PLACENUM"];
-				data.EFOOT		= row["EFOOT"].ToString();
-				data.ENSURE		= row["ENSURE"].ToString();
-				data.ESSURE		= row["ESSURE"].ToString();
-				data.EDSURE		= row["EDSURE"].ToString();
-				data.EPSURE		= row["EPSURE"].ToString();
-				data.EFSURE		= row["EFSURE"].ToString();
-				data.RECNO		= (int)row["RECNO"];
-				data.SENTENCE = row["SENTENCE"].ToString();
-				data.SRTDATE	= row["SRTDATE"].ToString();
-				data.TT				= row["TT"].ToString();
-				data.REF_ID		= (int)row["REF_ID"];
+				conn.Open();
 
-				TMGEntities db = new TMGEntities();
-				db.Events.AddObject(data);
+				using (var cmd = new SQLiteCommand(conn))
+				{
+					using (var transaction = conn.BeginTransaction())
+					{
+						cmd.CommandText = "DELETE FROM Event;";
+						cmd.ExecuteNonQuery();
 
-				try { db.SaveChanges(); Tracer("Events Added: {0} {1}%");}
-				catch (Exception ex) { }//Console.WriteLine(ex.InnerException); }
+						foreach (DbDataRecord row in oledbReader)
+						{
+							string sql = "INSERT INTO Event (ETYPE,DSID,PER1SHOW,PER2SHOW,PER1,PER2,EDATE,PLACENUM,EFOOT,ENSURE,ESSURE,EDSURE,EPSURE,EFSURE,RECNO,SENTENCE,SRTDATE,TT,REF_ID) ";
+							sql += string.Format("VALUES({0},{1},'{2}','{3}',{4},{5},'{6}',{7},'{8}','{9}','{10}','{11}','{12}','{13}',{14},'{15}','{16}','{17}',{18});",
+							(int)row["ETYPE"],
+							(int)row["DSID"],
+							(bool)row["PER1SHOW"],
+							(bool)row["PER2SHOW"],
+							(int)row["PER1"],
+							(int)row["PER2"],
+							row["EDATE"].ToString(),
+							(int)row["PLACENUM"],
+							row["EFOOT"].ToString().Replace("'","`"),
+							row["ENSURE"].ToString(),
+							row["ESSURE"].ToString(),
+							row["EDSURE"].ToString(),
+							row["EPSURE"].ToString(),
+							row["EFSURE"].ToString(),
+							(int)row["RECNO"],
+							row["SENTENCE"].ToString(),
+							row["SRTDATE"].ToString(),
+							row["TT"].ToString(),
+							(int)row["REF_ID"]);
+
+							cmd.CommandText = sql;
+							cmd.ExecuteNonQuery();
+
+							Tracer("Events Added: {0} {1}%");
+						}
+						transaction.Commit();
+					}
+				}
+				conn.Close();
 			}
 		}
 	}
 }
+
+
